@@ -8,9 +8,8 @@ import streamlit as st
 
 st.set_page_config(page_title="PDF Noise Remover", layout="wide")
 
-
 # =====================================================================
-# CORE CLEANING ALGORITHM (unchanged logic from your notebook)
+# CORE CLEANING ALGORITHM
 # =====================================================================
 def clean_page_image(
     img,
@@ -214,7 +213,8 @@ with st.sidebar:
         end_page = st.number_input("End page", min_value=1, value=10, step=1)
 
     st.header("Quality")
-    dpi = st.slider("DPI", min_value=100, max_value=400, value=290, step=10)
+    # Changed default DPI to 150 to prevent memory crashes on Streamlit Cloud
+    dpi = st.slider("DPI", min_value=100, max_value=400, value=150, step=10) 
 
     with st.expander("Advanced cleaning parameters"):
         block_size = st.slider("Threshold block size (odd)", 3, 99, 31, step=2)
@@ -269,10 +269,12 @@ if uploaded_file is not None:
             col1, col2 = st.columns(2)
             with col1:
                 st.subheader("Before (page 1 of range)")
-                st.image(cv2.cvtColor(before_img, cv2.COLOR_BGR2RGB), use_container_width=True)
+                # Updated parameter from use_container_width to width="stretch"
+                st.image(cv2.cvtColor(before_img, cv2.COLOR_BGR2RGB), width="stretch")
             with col2:
                 st.subheader("After")
-                st.image(after_img, use_container_width=True)
+                # Updated parameter from use_container_width to width="stretch"
+                st.image(after_img, width="stretch")
 
         st.download_button(
             "⬇️ Download cleaned PDF",
